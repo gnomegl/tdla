@@ -1,14 +1,37 @@
 #!/bin/bash
 set -e
 
+usage() {
+  echo "Usage: $(basename "$0") <chat_id> [--size|-s <number_of_messages>]" >&2
+  exit 1
+}
+
 if [ -z "$1" ]; then
-    echo "Usage: $(basename "$0") <chat_id>" >&2
-    exit 1
+  usage
 fi
 
 id="$1"
+shift
+
+size_option=""
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+  --size | -s)
+    if [[ -z "$2" || ! "$2" =~ ^[0-9]+$ ]]; then
+      echo "Error: --size|-s requires a numeric value" >&2
+      usage
+    fi
+    size_option="-T last -i $2"
+    shift 2 
+    ;;
+  *)
+    echo "Unknown option: $1" >&2
+    usage
+    ;;
+  esac
+done
+
 chat_file="${id}.json"
 
-tdl chat export -c "$id" -o "$chat_file" && tdl dl -f "$chat_file" -d "$id"
-
-
+tdl chat export -c "$id" $size_option -o "$chat_file" && tdl dl -f "$chat_file" -d "$id"

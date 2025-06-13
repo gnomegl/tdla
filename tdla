@@ -2,7 +2,7 @@
 set -e
 
 if [ -z "$1" ]; then
-    echo "Usage: $0 <chat_id>" >&2
+    echo "Usage: $(basename "$0") <chat_id>" >&2
     exit 1
 fi
 

@@ -1,0 +1,14 @@
+#!/bin/bash
+set -e
+
+if [ -z "$1" ]; then
+    echo "Usage: $0 <chat_id>" >&2
+    exit 1
+fi
+
+id="$1"
+chat_file="${id}.json"
+
+tdl chat export -c "$id" -o "$chat_file" && tdl dl -f "$chat_file" -d "$id"
+
+

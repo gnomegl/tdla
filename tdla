@@ -2,7 +2,7 @@
 set -e
 
 usage() {
-  echo "Usage: $(basename "$0") <chat_id> [--size|-s <number_of_messages>] [--with-content|-w]" >&2
+  echo "Usage: $(basename "$0") <chat_id> [--size|-s <number_of_messages>] [--with-content|-w] [--all|-a]" >&2
   exit 1
 }
 
@@ -15,6 +15,7 @@ shift
 
 size_option=""
 with_content=""
+all_option=""
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -30,6 +31,10 @@ while [[ $# -gt 0 ]]; do
     with_content="--with-content"
     shift
     ;;
+  --all | -a)
+    all_option="--all"
+    shift
+    ;;
   *)
     echo "Unknown option: $1" >&2
     usage
@@ -39,4 +44,4 @@ done
 
 chat_file="${id}.json"
 
-tdl chat export -c "$id" $size_option $with_content -o "$chat_file" && tdl dl -f "$chat_file" -d "$id"
+tdl chat export -c "$id" $size_option $with_content $all_option -o "$chat_file" && tdl dl -f "$chat_file" -d "$id"

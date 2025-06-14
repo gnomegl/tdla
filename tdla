@@ -49,4 +49,4 @@ done
 
 chat_file="${id}.json"
 
-tdl chat export -c "$id" $size_option $with_content $all_option $raw_option -o "$chat_file" && tdl dl -f "$chat_file" -d "$id"
+tdl chat export -c "$id" $size_option $with_content $all_option $raw_option -o "$chat_file" && tdl dl -f "$chat_file" -d "$id" --skip-same

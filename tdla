@@ -2,7 +2,7 @@
 set -e
 
 usage() {
-  echo "Usage: $(basename "$0") <chat_id> [--size|-s <number_of_messages>] [--with-content|-w] [--all|-a] [--raw|-r]" >&2
+  echo "Usage: $(basename "$0") <chat_id> [--namespace|--ns|-n <namespace>] [--size|-s <number_of_messages>] [--with-content|-w] [--all|-a] [--raw|-r]" >&2
   exit 1
 }
 
@@ -13,6 +13,7 @@ fi
 id="$1"
 shift
 
+namespace_option=()
 size_option=""
 with_content=""
 all_option=""
@@ -20,6 +21,14 @@ raw_option=""
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
+  --namespace | --ns | -n)
+    if [[ -z "$2" || "$2" == -* ]]; then
+      echo "Error: --namespace|--ns|-n requires a namespace value" >&2
+      usage
+    fi
+    namespace_option=(-n "$2")
+    shift 2
+    ;;
   --size | -s)
     if [[ -z "$2" || ! "$2" =~ ^[0-9]+$ ]]; then
       echo "Error: --size|-s requires a numeric value" >&2
@@ -49,4 +58,4 @@ done
 
 chat_file="${id}.json"
 
-tdl chat export -c "$id" $size_option $with_content $all_option $raw_option -o "$chat_file" && tdl dl -f "$chat_file" -d "$id" --skip-same
+tdl "${namespace_option[@]}" chat export -c "$id" $size_option $with_content $all_option $raw_option -o "$chat_file" && tdl "${namespace_option[@]}" dl -f "$chat_file" -d "$id" --skip-same

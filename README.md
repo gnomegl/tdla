@@ -13,24 +13,22 @@ basher install gnomegl/tdla
 ## usage
 
 ```bash
-tdla [command] [options]
+tdla <chat_id> [options]
 ```
 
-export and download telegram chats.
+Exports and downloads Telegram chat media through `tdl`.
 
-## commands
-
-- `export` - export chat messages
-- `download` - download media files
-- `list` - list available chats
-- `search` - search messages
+By default, `tdla` resumes from the last message it previously downloaded for the chat. It stores checkpoints in `./.tdla-state/` after successful downloads. If no checkpoint exists, it tries to derive the last downloaded message ID from existing files in the download directory using `tdl`'s default filename template.
 
 ## options
 
-- `-c, --chat` - chat id or username
-- `-l, --limit` - message limit
-- `-f, --format` - export format (json/csv/html)
-- `-o, --output` - output directory
+- `-n, --namespace, --ns <namespace>` - tdl namespace
+- `-s, --size <number>` - export the last N messages instead of resuming
+- `-w, --with-content` - include message content in export
+- `-a, --all` - include non-media messages in export
+- `-r, --raw` - include raw Telegram message structs
+- `--from-beginning, --no-resume` - ignore checkpoints and export all matching messages
+- `--state-dir <dir>` - checkpoint directory (default: `./.tdla-state`)
 
 ## requirements
 
